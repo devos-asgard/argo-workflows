@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"math"
 	"net/http"
 	"os"
@@ -3474,12 +3473,9 @@ func (woc *wfOperationCtx) executeSuspend(nodeName string, templateScope string,
 		resp, err := http.Post(requestUrl, "application/json", bytes.NewBuffer(reqBody))
 		if err != nil {
 			woc.log.Warnf("Failed to request nodeInfo : %v", err)
-			resp = &http.Response{
-				StatusCode: http.StatusInternalServerError,
-				Body:       io.NopCloser(strings.NewReader("")),
-			}
 		}
 		defer resp.Body.Close()
+		woc.log.Infof("response Status : %v", resp.Status)
 	}
 
 	// If there is either an active workflow deadline, or if this node is suspended with a duration, then the workflow

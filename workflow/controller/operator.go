@@ -3474,8 +3474,10 @@ func (woc *wfOperationCtx) executeSuspend(nodeName string, templateScope string,
 		if err != nil {
 			woc.log.Warnf("Failed to request nodeInfo : %v", err)
 		}
-		defer resp.Body.Close()
-		woc.log.Infof("response Status : %v", resp.Status)
+		if resp != nil && resp.Body != nil {
+			resp.Body.Close()
+			woc.log.Infof("response Status : %v", resp.Status)
+		}
 	}
 
 	// If there is either an active workflow deadline, or if this node is suspended with a duration, then the workflow
